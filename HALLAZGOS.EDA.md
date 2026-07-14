@@ -7,8 +7,7 @@ queries corren sobre las tablas ya limpias en el schema `RAW` de
 
 ---
 
-## Pregunta 1: ¿Cómo evolucionaron las exportaciones argentinas por
-nivel de intensidad tecnológica en los últimos años?
+## Pregunta 1: ¿Cómo evolucionaron las exportaciones argentinas por nivel de intensidad tecnológica en los últimos años?
 
 ```sql
 SELECT
@@ -38,8 +37,7 @@ bajo número de jugadores relevantes en el segmento.
 
 ---
 
-## Pregunta 2: ¿Qué países concentran la demanda de exportaciones
-argentinas de Alta Tecnología?
+## Pregunta 2: ¿Qué países concentran la demanda de exportaciones argentinas de Alta Tecnología?
 
 ```sql
 SELECT
@@ -74,8 +72,7 @@ EE.UU. y Alemania.
 
 ---
 
-## Pregunta 3: ¿El crecimiento de las exportaciones se explica por
-precio o por volumen?
+## Pregunta 3: ¿El crecimiento de las exportaciones se explica por precio o por volumen?
 
 ```sql
 SELECT
@@ -132,8 +129,7 @@ producto o nichos con menor presión de precios commoditizados.
 
 ---
 
-## Pregunta 4: ¿Cómo se compara Argentina con la tendencia general del
-propio país? (benchmark interno entre sectores, 2013 → 2024)
+## Pregunta 4: ¿Cómo se compara Argentina con la tendencia general del propio país? (benchmark interno entre sectores, 2013 → 2024)
 
 ```sql
 WITH por_sector_anio AS (
@@ -177,8 +173,7 @@ profundizó.
 
 ---
 
-## Pregunta 5: ¿Hay mercados con crecimiento fuerte pero baja presencia
-argentina? (oportunidades de expansión)
+## Pregunta 5: ¿Hay mercados con crecimiento fuerte pero baja presencia argentina? (oportunidades de expansión)
 
 ```sql
 WITH periodo1 AS (
@@ -230,8 +225,7 @@ tradicionales (Brasil, EE.UU.).
 
 ---
 
-## Pregunta 6: ¿El comercio exterior general del país crece por precio
-o por volumen? (sección de importaciones)
+## Pregunta 6: ¿El comercio exterior general del país crece por precio o por volumen? (sección de importaciones)
 
 ```sql
 SELECT
