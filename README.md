@@ -93,13 +93,9 @@ Licencia: Creative Commons Attribution 4.0.
 - `docs/conclusiones.md` — informe ejecutivo con recomendaciones
   estratégicas para la Gerencia Comercial
 - `sql/` — queries de limpieza y análisis (a agregar)
+- -Inteligencia de mercado de exportacion Tecnologica Argentina.pbix - Proyecto Power Bi
 
-## Estado del proyecto
 
-Completo: comprensión del negocio, definición del proyecto, datasets,
-plan, limpieza de datos, análisis exploratorio, análisis de negocio,
-dashboard y conclusiones. Pendiente: publicación final (LinkedIn,
-guion de entrevista, resumen para CV).
 
 ## Limitaciones del análisis
 
