@@ -1,0 +1,115 @@
+# Dashboard (Power BI)
+
+Conectado directamente a Snowflake (`COMEX_TECH_DB.RAW`), con 4 tablas
+relacionadas por la columna `AÑO`: `COMEX_SECTORES_PAISES`,
+`EXPORT_INDICES`, `IMPORT_INDICES`, `CPI_EEUU`.
+
+## Estructura: 3 páginas
+
+### Página 1 — Panorama General
+- **Gráfico de líneas**: evolución de exportaciones por sector de
+  intensidad tecnológica, 2013-2024 (Pregunta 1 del EDA).
+- **KPI**: Valor total exportado 2024 (todos los sectores).
+- **KPI**: Participación de Alta Tecnología sobre el total exportado.
+- **KPI**: Variación % total exportado 2013 → 2024.
+- **Gráfico de barras horizontales**: variación % por sector de
+  intensidad tecnológica (Pregunta 4 del EDA).
+
+### Página 2 — Mercados y Oportunidades
+- **Selector (segmentación de datos)**: sector de intensidad
+  tecnológica (Alta / Media Alta / Media Baja / Baja).
+- **Mapa**: exportaciones por país de destino, filtrado por
+  Exportaciones (Pregunta 2 del EDA).
+- **Gráfico de barras horizontales**: ranking de oportunidades de
+  expansión — países con mayor crecimiento entre 2013-2016 y
+  2021-2024, con volumen reciente todavía bajo (Pregunta 5 del EDA).
+  Excluye categorías administrativas del sistema aduanero (ej.
+  "Disponibles para agrupamientos especiales").
+
+### Página 3 — Contexto Macro
+- **Gráfico de líneas**: Valor, Precio y Cantidad de exportaciones
+  (índice base 2004=100), 1990-2025.
+- **Gráfico de líneas**: mismo análisis para importaciones.
+- **KPI**: Variación % del índice de Cantidad de exportaciones,
+  2013 → 2024.
+- **KPI**: Variación % del índice de Precio de exportaciones ajustado
+  por inflación en dólares (CPI de EE.UU.), 2013 → 2024.
+
+## Medidas DAX principales
+
+```dax
+Valor Total = SUM(COMEX_SECTORES_PAISES[VALOR])
+
+Participacion Alta Tecnologia % =
+VAR TotalAltaTech =
+    CALCULATE(
+        [Valor Total],
+        COMEX_SECTORES_PAISES[SECTOR_INTENSIDAD_TECNOLOGICA] = "ALTA TECNOLOGIA"
+    )
+VAR TotalGeneral =
+    CALCULATE(
+        [Valor Total],
+        ALL(COMEX_SECTORES_PAISES[SECTOR_INTENSIDAD_TECNOLOGICA])
+    )
+RETURN
+    DIVIDE(TotalAltaTech, TotalGeneral)
+
+Variacion Total 2013 2024 % =
+VAR Valor2013 = CALCULATE([Valor Total], COMEX_SECTORES_PAISES[AÑO] = 2013)
+VAR Valor2024 = CALCULATE([Valor Total], COMEX_SECTORES_PAISES[AÑO] = 2024)
+RETURN
+    DIVIDE(Valor2024 - Valor2013, Valor2013)
+
+Variacion % por Sector =
+VAR Valor2013 = CALCULATE([Valor Total], COMEX_SECTORES_PAISES[AÑO] = 2013)
+VAR Valor2024 = CALCULATE([Valor Total], COMEX_SECTORES_PAISES[AÑO] = 2024)
+RETURN
+    DIVIDE(Valor2024 - Valor2013, Valor2013)
+-- Nota: misma fórmula que la anterior; el resultado cambia según el
+-- contexto de fila (sector) en que se usa, por eso sirve tanto para
+-- el KPI general como para el desglose por sector del gráfico de barras.
+
+Promedio Periodo Reciente =
+CALCULATE(
+    [Valor Total],
+    COMEX_SECTORES_PAISES[AÑO] >= 2021,
+    COMEX_SECTORES_PAISES[AÑO] <= 2024
+) / 4
+
+Promedio Periodo Viejo =
+CALCULATE(
+    [Valor Total],
+    COMEX_SECTORES_PAISES[AÑO] >= 2013,
+    COMEX_SECTORES_PAISES[AÑO] <= 2016
+) / 4
+
+Diferencia Periodos = [Promedio Periodo Reciente] - [Promedio Periodo Viejo]
+
+Variacion Cantidad Exportaciones % =
+VAR Cantidad2013 = CALCULATE(SUM(EXPORT_INDICES[CANTIDAD_GENERAL]), EXPORT_INDICES[AÑO] = 2013)
+VAR Cantidad2024 = CALCULATE(SUM(EXPORT_INDICES[CANTIDAD_GENERAL]), EXPORT_INDICES[AÑO] = 2024)
+RETURN
+    DIVIDE(Cantidad2024 - Cantidad2013, Cantidad2013)
+
+Precio Real Ajustado 2024 =
+VAR PrecioNominal2024 = CALCULATE(SUM(EXPORT_INDICES[PRECIO_GENERAL]), EXPORT_INDICES[AÑO] = 2024)
+VAR CPI2024 = CALCULATE(SUM(CPI_EEUU[CPI_PROMEDIO_ANUAL]), CPI_EEUU[AÑO] = 2024)
+VAR CPI2013 = CALCULATE(SUM(CPI_EEUU[CPI_PROMEDIO_ANUAL]), CPI_EEUU[AÑO] = 2013)
+RETURN
+    PrecioNominal2024 * (CPI2013 / CPI2024)
+
+Variacion Precio Real % =
+VAR PrecioNominal2013 = CALCULATE(SUM(EXPORT_INDICES[PRECIO_GENERAL]), EXPORT_INDICES[AÑO] = 2013)
+RETURN
+    DIVIDE([Precio Real Ajustado 2024] - PrecioNominal2013, PrecioNominal2013)
+```
+
+## Relaciones del modelo
+
+Las 4 tablas se relacionan por `AÑO`:
+- `COMEX_SECTORES_PAISES` (*) → `EXPORT_INDICES` (1): varios a uno
+- `EXPORT_INDICES` (1) ↔ `IMPORT_INDICES` (1): uno a uno
+- `EXPORT_INDICES` (1) ↔ `CPI_EEUU` (1): uno a uno
+
+Todas con dirección de filtro cruzado "Ambas", para que los filtros de
+cualquier tabla afecten a las visualizaciones basadas en las demás.
