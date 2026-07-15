@@ -102,16 +102,4 @@ por diferenciación de producto.
 
 
 
-## KPIs del Dashboard
-Panorama General
 
-- Valor Total (USD 62,65 mil millones): suma de todo lo exportado en 2024, considerando las 4 categorías de intensidad tecnológica juntas. Muestra la magnitud total del comercio exterior tecnológico argentino en el año.
-- Variación Total 2013→2024 (+6,7%): compara ese total contra el mismo dato de 2013. El país exportó un 6,7% más que hace una década, aunque ese crecimiento está muy desigualmente repartido entre sectores.
-- Participación de Alta Tecnología (2,5%): qué porción del total exportado corresponde específicamente a Alta Tecnología. Un número chico que confirma que este segmento es una fracción mínima del comercio exterior argentino.
-
-Contexto Macro
-
-Variación Cantidad Exportaciones (+9,7%): cuánto más volumen físico (no dólares) exportó el país entre 2013 y 2024, aislando el efecto "vendimos más unidades" del efecto precio.
-Variación Precio Real (-29,0%): cuánto cambió el precio de exportación ajustado por inflación en dólares (CPI de EE.UU.). El KPI más contundente del proyecto: en términos reales, Argentina vendió a precios bastante más bajos que hace una década.
-
-En conjunto: estos 5 indicadores muestran que Argentina exportó más en 2024 que en 2013, pero ese crecimiento se explica por vender mayor volumen — no por mejores precios, que de hecho cayeron con fuerza en términos reales.
